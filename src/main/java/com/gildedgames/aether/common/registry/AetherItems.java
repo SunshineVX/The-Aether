@@ -1,13 +1,16 @@
 package com.gildedgames.aether.common.registry;
 
-import com.gildedgames.aether.client.registry.AetherSoundEvents;
 import com.gildedgames.aether.Aether;
+import com.gildedgames.aether.client.registry.AetherSoundEvents;
 import com.gildedgames.aether.common.item.accessories.abilities.IIceAccessory;
-import com.gildedgames.aether.common.item.accessories.cape.*;
+import com.gildedgames.aether.common.item.accessories.cape.AgilityCapeItem;
+import com.gildedgames.aether.common.item.accessories.cape.CapeItem;
+import com.gildedgames.aether.common.item.accessories.cape.InvisibilityCloakItem;
+import com.gildedgames.aether.common.item.accessories.cape.ValkyrieCapeItem;
 import com.gildedgames.aether.common.item.accessories.gloves.GlovesItem;
+import com.gildedgames.aether.common.item.accessories.gloves.GoldGlovesItem;
 import com.gildedgames.aether.common.item.accessories.gloves.LeatherGlovesItem;
 import com.gildedgames.aether.common.item.accessories.gloves.ZaniteGlovesItem;
-import com.gildedgames.aether.common.item.accessories.gloves.GoldGlovesItem;
 import com.gildedgames.aether.common.item.accessories.miscellaneous.GoldenFeatherItem;
 import com.gildedgames.aether.common.item.accessories.miscellaneous.IronBubbleItem;
 import com.gildedgames.aether.common.item.accessories.miscellaneous.RegenerationStoneItem;
@@ -17,10 +20,17 @@ import com.gildedgames.aether.common.item.accessories.pendant.PendantItem;
 import com.gildedgames.aether.common.item.accessories.pendant.ZanitePendantItem;
 import com.gildedgames.aether.common.item.accessories.ring.IceRingItem;
 import com.gildedgames.aether.common.item.accessories.ring.RingItem;
+import com.gildedgames.aether.common.item.accessories.ring.ZaniteRingItem;
+import com.gildedgames.aether.common.item.combat.*;
 import com.gildedgames.aether.common.item.combat.loot.*;
+import com.gildedgames.aether.common.item.food.GummySwetItem;
+import com.gildedgames.aether.common.item.food.HealingStoneItem;
 import com.gildedgames.aether.common.item.food.WhiteAppleItem;
 import com.gildedgames.aether.common.item.materials.AmbrosiumShardItem;
+import com.gildedgames.aether.common.item.materials.SkyrootStickItem;
+import com.gildedgames.aether.common.item.materials.SwetBallItem;
 import com.gildedgames.aether.common.item.materials.util.ISwetBallConversion;
+import com.gildedgames.aether.common.item.miscellaneous.*;
 import com.gildedgames.aether.common.item.miscellaneous.bucket.*;
 import com.gildedgames.aether.common.item.tools.gravitite.GravititeAxeItem;
 import com.gildedgames.aether.common.item.tools.gravitite.GravititeHoeItem;
@@ -43,35 +53,14 @@ import com.gildedgames.aether.common.item.tools.zanite.ZaniteHoeItem;
 import com.gildedgames.aether.common.item.tools.zanite.ZanitePickaxeItem;
 import com.gildedgames.aether.common.item.tools.zanite.ZaniteShovelItem;
 import com.gildedgames.aether.core.registry.AetherDungeonTypes;
-import com.gildedgames.aether.common.item.accessories.ring.ZaniteRingItem;
-import com.gildedgames.aether.common.item.food.HealingStoneItem;
-import com.gildedgames.aether.common.item.miscellaneous.*;
-import com.gildedgames.aether.common.item.materials.SkyrootStickItem;
-import com.gildedgames.aether.common.item.food.GummySwetItem;
-import com.gildedgames.aether.common.item.materials.SwetBallItem;
-import com.gildedgames.aether.common.item.combat.*;
-import com.gildedgames.aether.common.item.miscellaneous.LoreBookItem;
 import com.gildedgames.aether.core.registry.AetherMoaTypes;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.RecordItem;
-import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tiers;
 import net.minecraftforge.registries.RegistryObject;
 
 public class AetherItems
@@ -269,8 +258,10 @@ public class AetherItems
 	public static final RegistryObject<SpawnEggItem> PHYG_SPAWN_EGG = ITEMS.register("phyg_spawn_egg", () -> new ForgeSpawnEggItem(AetherEntityTypes.PHYG, 0xFFC1D0, 0xFFD939, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 	public static final RegistryObject<SpawnEggItem> SENTRY_SPAWN_EGG = ITEMS.register("sentry_spawn_egg", () -> new ForgeSpawnEggItem(AetherEntityTypes.SENTRY, 0x808080,0x3A8AEC, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 	public static final RegistryObject<SpawnEggItem> SHEEPUFF_SPAWN_EGG = ITEMS.register("sheepuff_spawn_egg", () -> new ForgeSpawnEggItem(AetherEntityTypes.SHEEPUFF, 0xE2FCFF, 0xCB9090, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+//	public static final RegistryObject<SpawnEggItem> SWET_SPAWN_EGG = ITEMS.register("swet_spawn_egg", () -> new ForgeSpawnEggItem(AetherEntityTypes.SWET, 0xcdda4f, 0x4fb1da, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 	public static final RegistryObject<SpawnEggItem> WHIRLWIND_SPAWN_EGG = ITEMS.register("whirlwind_spawn_egg", () -> new ForgeSpawnEggItem(AetherEntityTypes.WHIRLWIND, 0x9fc3f7, 0xffffff, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 	public static final RegistryObject<SpawnEggItem> ZEPHYR_SPAWN_EGG = ITEMS.register("zephyr_spawn_egg", () -> new ForgeSpawnEggItem(AetherEntityTypes.ZEPHYR, 0xDFDFDF, 0x99CFE8, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+	public static final RegistryObject<SpawnEggItem> SLIDER_SPAWN_EGG = ITEMS.register("slider_spawn_egg", () -> new ForgeSpawnEggItem(AetherEntityTypes.SLIDER, 0x808080, 0x3A8AEC, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
 	public static void registerAbilities() {
 		ISwetBallConversion.registerDefaultConversions();

@@ -4,8 +4,7 @@ import com.gildedgames.aether.common.registry.*;
 import com.gildedgames.aether.core.data.provider.AetherLanguageProvider;
 import net.minecraft.data.DataGenerator;
 
-public class AetherLangData extends AetherLanguageProvider
-{
+public class AetherLangData extends AetherLanguageProvider {
     public AetherLangData(DataGenerator gen) {
         super(gen);
     }
@@ -333,6 +332,7 @@ public class AetherLangData extends AetherLanguageProvider
         addItem(AetherItems.SHEEPUFF_SPAWN_EGG, "Sheepuff Spawn Egg");
         addItem(AetherItems.WHIRLWIND_SPAWN_EGG, "Whirlwind Spawn Egg");
         addItem(AetherItems.ZEPHYR_SPAWN_EGG, "Zephyr Spawn Egg");
+        addItem(AetherItems.SLIDER_SPAWN_EGG, "Slider Spawn Egg");
 
 
         addEntityType(AetherEntityTypes.PHYG, "Phyg");
@@ -504,11 +504,9 @@ public class AetherLangData extends AetherLanguageProvider
         addSubtitle("entity", "dart.hit", "Dart hits");
 
 
-
         addDeath("inebriation", "%1$s was inebriated");
         addDeath("inebriation.player", "%1$s was inebriated by %2$s");
         addDeath("ice_crystal", "%1$s was chilled by %2$s's Ice Crystal");
-
 
 
         addMenuText("minecraft", "Normal Theme");
