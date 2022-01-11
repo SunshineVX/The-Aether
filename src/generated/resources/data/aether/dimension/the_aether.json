@@ -90,34 +90,34 @@
     },
     "blockstates": [
       {
-        "Name": "minecraft:magenta_wool"
-      },
-      {
-        "Name": "minecraft:purple_wool"
-      },
-      {
-        "Name": "minecraft:blue_wool"
-      },
-      {
-        "Name": "minecraft:light_blue_wool"
-      },
-      {
-        "Name": "minecraft:cyan_wool"
-      },
-      {
-        "Name": "minecraft:green_wool"
-      },
-      {
-        "Name": "minecraft:lime_wool"
-      },
-      {
-        "Name": "minecraft:yellow_wool"
+        "Name": "minecraft:red_wool"
       },
       {
         "Name": "minecraft:orange_wool"
       },
       {
-        "Name": "minecraft:red_wool"
+        "Name": "minecraft:yellow_wool"
+      },
+      {
+        "Name": "minecraft:lime_wool"
+      },
+      {
+        "Name": "minecraft:green_wool"
+      },
+      {
+        "Name": "minecraft:cyan_wool"
+      },
+      {
+        "Name": "minecraft:light_blue_wool"
+      },
+      {
+        "Name": "minecraft:blue_wool"
+      },
+      {
+        "Name": "minecraft:purple_wool"
+      },
+      {
+        "Name": "minecraft:magenta_wool"
       },
       {
         "Name": "minecraft:red_concrete"
@@ -160,36 +160,6 @@
                 1.0
               ],
               "depth": [
-                -0.8,
-                0.8
-              ],
-              "weirdness": [
-                -1.0,
-                1.0
-              ],
-              "offset": 0.0,
-              "temperature": [
-                -1.0,
-                1.0
-              ],
-              "humidity": [
-                -1.0,
-                1.0
-              ],
-              "continentalness": [
-                -1.0,
-                1.0
-              ]
-            },
-            "biome": "aether:underground"
-          },
-          {
-            "parameters": {
-              "erosion": [
-                -1.0,
-                1.0
-              ],
-              "depth": [
                 -1.0,
                 1.0
               ],
@@ -200,7 +170,7 @@
               "offset": 0.0,
               "temperature": [
                 -2.0,
-                -0.1
+                -0.2
               ],
               "humidity": [
                 -1.0,
@@ -229,8 +199,8 @@
               ],
               "offset": 0.0,
               "temperature": [
-                -0.1,
-                0.1
+                -0.2,
+                0.2
               ],
               "humidity": [
                 -1.0,
@@ -259,7 +229,7 @@
               ],
               "offset": 0.0,
               "temperature": [
-                0.1,
+                0.2,
                 2.0
               ],
               "humidity": [

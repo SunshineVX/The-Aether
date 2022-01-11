@@ -56,20 +56,20 @@ public class AetherWorldData extends AetherWorldProvider {
         // weirdness
         // offset
         BiomeSource biomes = new MultiNoiseBiomeSource(new Climate.ParameterList<>(List.of(
+                //Pair.of(
+                //        Climate.parameters(
+                //                FULL_RANGE,
+                //                FULL_RANGE,
+                //                FULL_RANGE,
+                //                FULL_RANGE,
+                //                Climate.Parameter.span(-0.8f, 0.8f),
+                //                FULL_RANGE,
+                //                0f
+                //        ), () -> AetherBiomeData.UNDERGROUND
+                //),
                 Pair.of(
                         Climate.parameters(
-                                FULL_RANGE,
-                                FULL_RANGE,
-                                FULL_RANGE,
-                                FULL_RANGE,
-                                Climate.Parameter.span(-0.8f, 0.8f),
-                                FULL_RANGE,
-                                0f
-                        ), () -> AetherBiomeData.UNDERGROUND
-                ),
-                Pair.of(
-                        Climate.parameters(
-                                Climate.Parameter.span(-2, -0.1f),
+                                Climate.Parameter.span(-2, -0.2f),
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
@@ -80,7 +80,7 @@ public class AetherWorldData extends AetherWorldProvider {
                 ),
                 Pair.of(
                         Climate.parameters(
-                                Climate.Parameter.span(-0.1f, 0.1f),
+                                Climate.Parameter.span(-0.2f, 0.2f),
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
@@ -91,7 +91,7 @@ public class AetherWorldData extends AetherWorldProvider {
                 ),
                 Pair.of(
                         Climate.parameters(
-                                Climate.Parameter.span(0.1f, 2),
+                                Climate.Parameter.span(0.2f, 2),
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
@@ -199,17 +199,17 @@ public class AetherWorldData extends AetherWorldProvider {
 
         List<BlockState> states = List.of(
                 // -1.0
-                Blocks.MAGENTA_WOOL.defaultBlockState(),
-                Blocks.PURPLE_WOOL.defaultBlockState(),
-                Blocks.BLUE_WOOL.defaultBlockState(),
-                Blocks.LIGHT_BLUE_WOOL.defaultBlockState(),
-                Blocks.CYAN_WOOL.defaultBlockState(),
-                // -0.5
-                Blocks.GREEN_WOOL.defaultBlockState(),
-                Blocks.LIME_WOOL.defaultBlockState(),
-                Blocks.YELLOW_WOOL.defaultBlockState(),
-                Blocks.ORANGE_WOOL.defaultBlockState(),
                 Blocks.RED_WOOL.defaultBlockState(),
+                Blocks.ORANGE_WOOL.defaultBlockState(),
+                Blocks.YELLOW_WOOL.defaultBlockState(),
+                Blocks.LIME_WOOL.defaultBlockState(),
+                Blocks.GREEN_WOOL.defaultBlockState(),
+                // -0.5
+                Blocks.CYAN_WOOL.defaultBlockState(),
+                Blocks.LIGHT_BLUE_WOOL.defaultBlockState(),
+                Blocks.BLUE_WOOL.defaultBlockState(),
+                Blocks.PURPLE_WOOL.defaultBlockState(),
+                Blocks.MAGENTA_WOOL.defaultBlockState(),
                 // SIGN BOUNDARY - 0.0
                 Blocks.RED_CONCRETE.defaultBlockState(),
                 Blocks.ORANGE_CONCRETE.defaultBlockState(),

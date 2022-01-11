@@ -96,24 +96,9 @@ public class CelledSpaceGenerator extends DelegatedChunkGenerator {
 
         for (int z = 0; z < 16; z++) {
             for (int x = 0; x < 16; x++) {
-                var sample = this.climateSampler().sample(xPos + x, 64, zPos + z);
+                var sample = this.climateSampler().sample((xPos + x), 64, (zPos + z));
 
-                long noise = sample.erosion();
-
-                float biomeF = (Climate.unquantizeCoord(noise) + 1f) * 0.5f;
-
-                //this.min(biomeF);
-                //this.max(biomeF);
-
-                var state = this.getBlockF(biomeF);
-
-                int yModification = (int) (biomeF * 20f);
-
-                if (x != 0 && z != 0)
-                    this.place(x, 102 + yModification, z, state, oceanHeightmap, worldHeightmap, chunk);
-
-                this.place(x, 101 + yModification, z, state, oceanHeightmap, worldHeightmap, chunk);
-                this.place(x, 100 + yModification, z, state, oceanHeightmap, worldHeightmap, chunk);
+                this.placeBiomeGraph(chunk, oceanHeightmap, worldHeightmap, x, z, sample.weirdness(), 128);
                 //this.place(x,  63, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).humidity()        / DEBUG), oceanHeightmap, worldHeightmap, chunk);
                 //this.place(x, 127, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).continentalness() / DEBUG), oceanHeightmap, worldHeightmap, chunk);
                 //this.place(x, 191, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).erosion()         / DEBUG), oceanHeightmap, worldHeightmap, chunk);
@@ -126,17 +111,50 @@ public class CelledSpaceGenerator extends DelegatedChunkGenerator {
         return chunk;
     }
 
-    private float min = Float.MAX_VALUE;
-    private synchronized void min(float min) {
-        this.min = Math.min(min, this.min);
+    private final static List<BlockState> glass_states = List.of(
+            // -1.0
+            Blocks.RED_STAINED_GLASS.defaultBlockState(),
+            Blocks.ORANGE_STAINED_GLASS.defaultBlockState(),
+            Blocks.YELLOW_STAINED_GLASS.defaultBlockState(),
+            Blocks.LIME_STAINED_GLASS.defaultBlockState(),
+            Blocks.GREEN_STAINED_GLASS.defaultBlockState(),
+            // -0.5
+            Blocks.CYAN_STAINED_GLASS.defaultBlockState(),
+            Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(),
+            Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
+            Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
+            Blocks.MAGENTA_STAINED_GLASS.defaultBlockState(),
+            // SIGN BOUNDARY - 0.0
+            Blocks.RED_STAINED_GLASS.defaultBlockState(),
+            Blocks.ORANGE_STAINED_GLASS.defaultBlockState(),
+            Blocks.YELLOW_STAINED_GLASS.defaultBlockState(),
+            Blocks.LIME_STAINED_GLASS.defaultBlockState(),
+            Blocks.GREEN_STAINED_GLASS.defaultBlockState(),
+            // -0.5
+            Blocks.CYAN_STAINED_GLASS.defaultBlockState(),
+            Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(),
+            Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
+            Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
+            Blocks.MAGENTA_STAINED_GLASS.defaultBlockState()
+            // -1.0
+    );
 
-        //return this.min;
-    }
-    private float max = Float.MIN_VALUE;
-    private synchronized void max(float max) {
-        this.max = Math.max(max, this.max);
+    @SuppressWarnings("SameParameterValue")
+    private void placeBiomeGraph(ChunkAccess chunk, Heightmap oceanHeightmap, Heightmap worldHeightmap, int x, int z, long noise, int elevation) {
+        float biomeF = (Climate.unquantizeCoord(noise) + 1f) * 0.5f;
 
-        //return this.max;
+        var graphState = this.getBlockF(biomeF);
+        var glassState = glass_states.get((int) Mth.clamp(biomeF * this.blocks.size(), 0, this.blocks.size() - 1));
+
+        int yModification = (int) (biomeF * 40f);
+
+        this.place(x, elevation + 4 + 20, z, glassState, oceanHeightmap, worldHeightmap, chunk);
+
+        this.place(x, elevation + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
+        this.place(x, elevation + 1 + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
+        this.place(x, elevation + 2 + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
+        this.place(x, elevation + 3 + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
+        this.place(x, elevation + 4 + yModification, z, (x == 0 || z == 0) ? (yModification < 20 ? Blocks.BLACK_STAINED_GLASS.defaultBlockState() : glassState) : graphState, oceanHeightmap, worldHeightmap, chunk);
     }
     
     @Deprecated // Debug
