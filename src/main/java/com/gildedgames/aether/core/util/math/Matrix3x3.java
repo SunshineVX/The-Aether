@@ -74,6 +74,8 @@ public record Matrix3x3(
         );
     }
 
+    // TODO Inverse
+
     private List<Float> values() {
         return List.of(this.a00, this.a01, this.a02, this.a10, this.a11, this.a12, this.a20, this.a21, this.a22);
     }

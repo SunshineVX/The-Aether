@@ -31,7 +31,7 @@ public class BronzeDungeonStructure extends NoiseAffectingStructureFeature<Jigsa
 
     private static Optional<PieceGenerator<JigsawConfiguration>> placePieces(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
         // Uncomment below to generate because terrain cannot go above y80 yet FIXME Remove once terrain can go above y80
-        //if (false)
+        if (false)
         if (!shouldPlace(context))
             return Optional.empty();
 

@@ -32,11 +32,11 @@ import java.util.Map;
 @Deprecated // This class is NOT going to stay.
 public final class AetherStructureIngress {
     public static void registerEvents(IEventBus modEventBus) {
-        AetherStructures.STRUCTURES.register(modEventBus);
-        modEventBus.addListener(AetherStructureIngress::setup);
+        //AetherStructures.STRUCTURES.register(modEventBus);
+        //modEventBus.addListener(AetherStructureIngress::setup);
 
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.addListener(EventPriority.NORMAL, AetherStructureIngress::addDimensionalSpacing);
+        //IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        //forgeBus.addListener(EventPriority.NORMAL, AetherStructureIngress::addDimensionalSpacing);
         //forgeBus.addListener(EventPriority.NORMAL, /*StructureFeature*/::setupStructureSpawns);
     }
 

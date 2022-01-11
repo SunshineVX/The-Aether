@@ -2,12 +2,15 @@ package com.gildedgames.aether.core.data.provider;
 
 import com.gildedgames.aether.Aether;
 import com.gildedgames.aether.common.block.state.properties.AetherBlockStateProperties;
+import com.gildedgames.aether.common.registry.AetherBiomeKeys;
 import com.gildedgames.aether.common.registry.AetherBlocks;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.DynamicOps;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.worldgen.TerrainProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
@@ -20,8 +23,7 @@ import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.function.Function;
 
-public abstract class AetherWorldProvider extends SmartRegistryWriteOps<JsonElement>
-{
+public abstract class AetherWorldProvider extends SmartRegistryWriteOps<JsonElement> {
     private static final SurfaceRules.RuleSource GRASS_BLOCK = makeStateRule(AetherBlocks.AETHER_GRASS_BLOCK.get().defaultBlockState().setValue(AetherBlockStateProperties.DOUBLE_DROPS, true));
     private static final SurfaceRules.RuleSource DIRT = makeStateRule(AetherBlocks.AETHER_DIRT.get().defaultBlockState().setValue(AetherBlockStateProperties.DOUBLE_DROPS, true));
     private static final SurfaceRules.RuleSource QUICKSOIL = makeStateRule(AetherBlocks.QUICKSOIL.get().defaultBlockState().setValue(AetherBlockStateProperties.DOUBLE_DROPS, true));
@@ -67,6 +69,7 @@ public abstract class AetherWorldProvider extends SmartRegistryWriteOps<JsonElem
                         128,
                         new NoiseSamplingSettings(2, 1, 80, 160),
                         new NoiseSlider(-23.4375D, 64, -46),
+
                         new NoiseSlider(-0.234375D, 7, 1),
                         2,
                         1,
@@ -92,6 +95,7 @@ public abstract class AetherWorldProvider extends SmartRegistryWriteOps<JsonElem
         SurfaceRules.RuleSource surface = SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(-1, 0), GRASS_BLOCK), DIRT);
 
         return SurfaceRules.sequence(
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(AetherBiomeKeys.UNDERGROUND), SurfaceRules.state(Blocks.GLASS.defaultBlockState())), //SurfaceRules.state(AetherBlocks.ENCHANTED_GRAVITITE.get().defaultBlockState())),
                 SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, surface),
                 SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, DIRT)
         );

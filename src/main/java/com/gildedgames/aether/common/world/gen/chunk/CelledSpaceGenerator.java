@@ -1,13 +1,17 @@
 package com.gildedgames.aether.common.world.gen.chunk;
 
+import com.gildedgames.aether.common.registry.AetherBiomeKeys;
 import com.gildedgames.aether.core.util.math.Matrix3x3;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -21,9 +25,12 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
+import java.util.stream.StreamSupport;
 
 @SuppressWarnings("unused")
 public class CelledSpaceGenerator extends DelegatedChunkGenerator {
+    private static final List<BlockState> ALL_BLOCKS = StreamSupport.stream(Registry.BLOCK.spliterator(), false).flatMap((block) -> block.getStateDefinition().getPossibleStates().stream()).toList();
+
     public static final Codec<CelledSpaceGenerator> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             ChunkGenerator.CODEC.fieldOf("delegate").forGetter(o -> o.delegate),
             Matrix3x3.CODEC.fieldOf("transformation").orElseGet(() -> Matrix3x3.identityScaled(256)).forGetter(o -> o.nodeMatrix),
@@ -74,12 +81,72 @@ public class CelledSpaceGenerator extends DelegatedChunkGenerator {
         int xPos = chunkPos.getMinBlockX();
         int zPos = chunkPos.getMinBlockZ();
 
-        for (int y = chunk.getMaxBuildHeight() - 1; y >= chunk.getMinBuildHeight(); y--)
-            for (int z = 0; z < 16; z++)
-                for (int x = 0; x < 16; x++)
-                    this.place(x, y, z, this.test(xPos + x, y, zPos + z, beardifier), oceanHeightmap, worldHeightmap, chunk);
+        /*for (int y = chunk.getMaxBuildHeight() - 1; y >= chunk.getMinBuildHeight(); y--) {
+            for (int z = 0; z < 16; z++) {
+                for (int x = 0; x < 16; x++) {
+                    BlockState state = this.getBlockI((int) this.climateSampler().sample(xPos + x, y, zPos + z).continentalness());
+
+                    //this.place(x, y, z, this.test(xPos + x, y, zPos + z, beardifier), oceanHeightmap, worldHeightmap, chunk);
+                    //BlockState state = this.getBlock(this.getNoiseBiome(xPos + x, y, zPos + z)); // this.getBlockI(chunk.getNoiseBiome(xPos + x, y, zPos + z).hashCode())
+
+                    this.place(x, y, z, state, oceanHeightmap, worldHeightmap, chunk);
+                }
+            }
+        }*/
+
+        for (int z = 0; z < 16; z++) {
+            for (int x = 0; x < 16; x++) {
+                var sample = this.climateSampler().sample(xPos + x, 64, zPos + z);
+
+                long noise = sample.erosion();
+
+                float biomeF = (Climate.unquantizeCoord(noise) + 1f) * 0.5f;
+
+                //this.min(biomeF);
+                //this.max(biomeF);
+
+                var state = this.getBlockF(biomeF);
+
+                int yModification = (int) (biomeF * 20f);
+
+                if (x != 0 && z != 0)
+                    this.place(x, 102 + yModification, z, state, oceanHeightmap, worldHeightmap, chunk);
+
+                this.place(x, 101 + yModification, z, state, oceanHeightmap, worldHeightmap, chunk);
+                this.place(x, 100 + yModification, z, state, oceanHeightmap, worldHeightmap, chunk);
+                //this.place(x,  63, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).humidity()        / DEBUG), oceanHeightmap, worldHeightmap, chunk);
+                //this.place(x, 127, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).continentalness() / DEBUG), oceanHeightmap, worldHeightmap, chunk);
+                //this.place(x, 191, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).erosion()         / DEBUG), oceanHeightmap, worldHeightmap, chunk);
+                //this.place(x, 255, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).weirdness()       / DEBUG), oceanHeightmap, worldHeightmap, chunk);
+
+                //this.place(x, 255, z, this.getBlockF(Climate.unquantizeCoord((int) this.climateSampler().sample(xPos + x, 64, zPos + z).depth())), oceanHeightmap, worldHeightmap, chunk);
+            }
+        }
 
         return chunk;
+    }
+
+    private float min = Float.MAX_VALUE;
+    private synchronized void min(float min) {
+        this.min = Math.min(min, this.min);
+
+        //return this.min;
+    }
+    private float max = Float.MIN_VALUE;
+    private synchronized void max(float max) {
+        this.max = Math.max(max, this.max);
+
+        //return this.max;
+    }
+    
+    @Deprecated // Debug
+    private BlockState getBlock(Biome biome) {
+        if (AetherBiomeKeys.UNDERGROUND.location().equals(biome.getRegistryName())) return Blocks.GRAY_STAINED_GLASS.defaultBlockState();
+        if (AetherBiomeKeys.SPARSE_FOREST.location().equals(biome.getRegistryName())) return Blocks.LIME_STAINED_GLASS.defaultBlockState();
+        if (AetherBiomeKeys.SKYWOOD_FOREST.location().equals(biome.getRegistryName())) return Blocks.GREEN_STAINED_GLASS.defaultBlockState();
+        if (AetherBiomeKeys.CRAMPED_FOREST.location().equals(biome.getRegistryName())) return Blocks.YELLOW_STAINED_GLASS.defaultBlockState();
+
+        return Blocks.RED_STAINED_GLASS.defaultBlockState();
     }
 
     protected BlockState test(int x, int y, int z, Beardifier beardifier) {
@@ -97,25 +164,25 @@ public class CelledSpaceGenerator extends DelegatedChunkGenerator {
         float rY = Math.abs((nodeSpaceY - node.getY() - 0.5f) * 2f);
         float rZ = Math.abs((nodeSpaceZ - node.getZ() - 0.5f) * 2f);
 
-        //float fraction = rX * rY + rX * rZ + rY * rZ - structureContribution * 25;
-        float fraction = rX * rX + rY * rY + rZ * rZ - structureContribution * 25;
+        float fraction = rX * rY + rX * rZ + rY * rZ - structureContribution * 25;
+        //float fraction = rX * rX + rY * rY + rZ * rZ - structureContribution * 25;
 
-        return fraction <= 1f ? this.getBlockI(node.getX() + node.getY() + node.getZ()) : EMPTY_DEFAULT;
+        return fraction <= 0.2f ? this.getBlockI(node.getX() + node.getY() + node.getZ()) : EMPTY_DEFAULT;
     }
 
     protected BlockState getBlockF(float fractional) {
         //if (fractional < 0 || this.blocks.isEmpty()) return EMPTY_DEFAULT;
-        return this.getBlockI((int) fractional * this.blocks.size());
+        return this.getBlockI((int) (fractional * this.blocks.size()));
     }
 
     protected BlockState getBlockI(int index) {
-        return this.blocks.get(Mth.positiveModulo(index, this.blocks.size()));
+        return this.blocks.get(Mth.clamp(index, 0, this.blocks.size() - 1));
     }
 
-    protected void place(int x, int y, int z, BlockState state, Heightmap oceanHeightmap, Heightmap worldHeightmap, ChunkAccess chunk) {
-        chunk.setBlockState(new BlockPos(x, y, z), state, false);
-        oceanHeightmap.update(x, y, z, state);
-        worldHeightmap.update(x, y, z, state);
+    protected void place(int blockX, int blockY, int blockZ, BlockState state, Heightmap oceanHeightmap, Heightmap worldHeightmap, ChunkAccess chunk) {
+        chunk.setBlockState(new BlockPos(blockX, blockY, blockZ), state, false);
+        oceanHeightmap.update(blockX, blockY, blockZ, state);
+        worldHeightmap.update(blockX, blockY, blockZ, state);
     }
 
     // FIXME Very placeholder-y

@@ -19,8 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-public abstract class SmartRegistryWriteOps<Format> extends MultiRegistryWriteOps<Format>
-{
+public abstract class SmartRegistryWriteOps<Format> extends MultiRegistryWriteOps<Format> {
     protected HashCache directoryCache;
 
     public SmartRegistryWriteOps(String modId, DataGenerator generator, DynamicOps<Format> ops, Function<Format, String> fileWriter, RegistryAccess dynamicRegistries) {
