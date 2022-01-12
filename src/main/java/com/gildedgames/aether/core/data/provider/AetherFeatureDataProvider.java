@@ -2,10 +2,13 @@ package com.gildedgames.aether.core.data.provider;
 
 import com.gildedgames.aether.common.block.state.properties.AetherBlockStateProperties;
 import com.gildedgames.aether.common.world.gen.configuration.AercloudConfiguration;
+import com.gildedgames.aether.core.data.AetherFeatureData;
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
@@ -54,5 +57,17 @@ public class AetherFeatureDataProvider
 
     public static List<PlacementModifier> rareOrePlacement(int p_195350_, PlacementModifier p_195351_) {
         return orePlacement(RarityFilter.onAverageOnceEvery(p_195350_), p_195351_);
+    }
+
+    public static BlockPredicateFilter copyBlockSurvivability(Block block) {
+        return copyBlockSurvivability(block.defaultBlockState());
+    }
+
+    public static BlockPredicateFilter copyBlockSurvivability(BlockState blockState) {
+        return BlockPredicateFilter.forPredicate(BlockPredicate.wouldSurvive(blockState, BlockPos.ZERO));
+    }
+
+    public static PlacedFeature treeBlendDensity(int perLayerCount) {
+        return AetherFeatureData.TREE_BLEND.placed(CountOnEveryLayerPlacement.of(perLayerCount));
     }
 }

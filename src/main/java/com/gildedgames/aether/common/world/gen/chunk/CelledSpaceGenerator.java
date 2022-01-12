@@ -81,90 +81,15 @@ public class CelledSpaceGenerator extends DelegatedChunkGenerator {
         int xPos = chunkPos.getMinBlockX();
         int zPos = chunkPos.getMinBlockZ();
 
-        /*for (int y = chunk.getMaxBuildHeight() - 1; y >= chunk.getMinBuildHeight(); y--) {
+        for (int y = chunk.getMaxBuildHeight() - 1; y >= chunk.getMinBuildHeight(); y--) {
             for (int z = 0; z < 16; z++) {
                 for (int x = 0; x < 16; x++) {
-                    BlockState state = this.getBlockI((int) this.climateSampler().sample(xPos + x, y, zPos + z).continentalness());
-
-                    //this.place(x, y, z, this.test(xPos + x, y, zPos + z, beardifier), oceanHeightmap, worldHeightmap, chunk);
-                    //BlockState state = this.getBlock(this.getNoiseBiome(xPos + x, y, zPos + z)); // this.getBlockI(chunk.getNoiseBiome(xPos + x, y, zPos + z).hashCode())
-
-                    this.place(x, y, z, state, oceanHeightmap, worldHeightmap, chunk);
+                    this.place(x, y, z, this.test(xPos + x, y, zPos + z, beardifier), oceanHeightmap, worldHeightmap, chunk);
                 }
-            }
-        }*/
-
-        for (int z = 0; z < 16; z++) {
-            for (int x = 0; x < 16; x++) {
-                var sample = this.climateSampler().sample((xPos + x), 64, (zPos + z));
-
-                this.placeBiomeGraph(chunk, oceanHeightmap, worldHeightmap, x, z, sample.weirdness(), 128);
-                //this.place(x,  63, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).humidity()        / DEBUG), oceanHeightmap, worldHeightmap, chunk);
-                //this.place(x, 127, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).continentalness() / DEBUG), oceanHeightmap, worldHeightmap, chunk);
-                //this.place(x, 191, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).erosion()         / DEBUG), oceanHeightmap, worldHeightmap, chunk);
-                //this.place(x, 255, z, this.getBlockI((int) this.climateSampler().sample(xPos + x, 64, zPos + z).weirdness()       / DEBUG), oceanHeightmap, worldHeightmap, chunk);
-
-                //this.place(x, 255, z, this.getBlockF(Climate.unquantizeCoord((int) this.climateSampler().sample(xPos + x, 64, zPos + z).depth())), oceanHeightmap, worldHeightmap, chunk);
             }
         }
 
         return chunk;
-    }
-
-    private final static List<BlockState> glass_states = List.of(
-            // -1.0
-            Blocks.RED_STAINED_GLASS.defaultBlockState(),
-            Blocks.ORANGE_STAINED_GLASS.defaultBlockState(),
-            Blocks.YELLOW_STAINED_GLASS.defaultBlockState(),
-            Blocks.LIME_STAINED_GLASS.defaultBlockState(),
-            Blocks.GREEN_STAINED_GLASS.defaultBlockState(),
-            // -0.5
-            Blocks.CYAN_STAINED_GLASS.defaultBlockState(),
-            Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(),
-            Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
-            Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
-            Blocks.MAGENTA_STAINED_GLASS.defaultBlockState(),
-            // SIGN BOUNDARY - 0.0
-            Blocks.RED_STAINED_GLASS.defaultBlockState(),
-            Blocks.ORANGE_STAINED_GLASS.defaultBlockState(),
-            Blocks.YELLOW_STAINED_GLASS.defaultBlockState(),
-            Blocks.LIME_STAINED_GLASS.defaultBlockState(),
-            Blocks.GREEN_STAINED_GLASS.defaultBlockState(),
-            // -0.5
-            Blocks.CYAN_STAINED_GLASS.defaultBlockState(),
-            Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(),
-            Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
-            Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
-            Blocks.MAGENTA_STAINED_GLASS.defaultBlockState()
-            // -1.0
-    );
-
-    @SuppressWarnings("SameParameterValue")
-    private void placeBiomeGraph(ChunkAccess chunk, Heightmap oceanHeightmap, Heightmap worldHeightmap, int x, int z, long noise, int elevation) {
-        float biomeF = (Climate.unquantizeCoord(noise) + 1f) * 0.5f;
-
-        var graphState = this.getBlockF(biomeF);
-        var glassState = glass_states.get((int) Mth.clamp(biomeF * this.blocks.size(), 0, this.blocks.size() - 1));
-
-        int yModification = (int) (biomeF * 40f);
-
-        this.place(x, elevation + 4 + 20, z, glassState, oceanHeightmap, worldHeightmap, chunk);
-
-        this.place(x, elevation + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
-        this.place(x, elevation + 1 + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
-        this.place(x, elevation + 2 + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
-        this.place(x, elevation + 3 + yModification, z, graphState, oceanHeightmap, worldHeightmap, chunk);
-        this.place(x, elevation + 4 + yModification, z, (x == 0 || z == 0) ? (yModification < 20 ? Blocks.BLACK_STAINED_GLASS.defaultBlockState() : glassState) : graphState, oceanHeightmap, worldHeightmap, chunk);
-    }
-    
-    @Deprecated // Debug
-    private BlockState getBlock(Biome biome) {
-        if (AetherBiomeKeys.UNDERGROUND.location().equals(biome.getRegistryName())) return Blocks.GRAY_STAINED_GLASS.defaultBlockState();
-        if (AetherBiomeKeys.SPARSE_FOREST.location().equals(biome.getRegistryName())) return Blocks.LIME_STAINED_GLASS.defaultBlockState();
-        if (AetherBiomeKeys.SKYWOOD_FOREST.location().equals(biome.getRegistryName())) return Blocks.GREEN_STAINED_GLASS.defaultBlockState();
-        if (AetherBiomeKeys.CRAMPED_FOREST.location().equals(biome.getRegistryName())) return Blocks.YELLOW_STAINED_GLASS.defaultBlockState();
-
-        return Blocks.RED_STAINED_GLASS.defaultBlockState();
     }
 
     protected BlockState test(int x, int y, int z, Beardifier beardifier) {
@@ -211,16 +136,6 @@ public class CelledSpaceGenerator extends DelegatedChunkGenerator {
         // TODO Vec3i (mutable) -> Node pooling system
         return this.nodes.computeIfAbsent(new BlockPos(vX, vY, vZ), vec3i -> vec3i);
     }
-
-    // (Mth.positiveModulo(x, this.blocksToUnitScale) - this.blockHalfScale) / (float) this.blockHalfScale
-
-    //protected int nearestXZ(int xzPos) {
-    //    return xzPos / this.blocksToUnitScale;
-    //}
-
-    //protected int nearestY(int yPos) {
-    //    return Mth.clamp(0, yPos / this.verticalScale, this.verticalUnitSpan - 1);
-    //}
 
     @Override
     protected Codec<? extends ChunkGenerator> codec() {

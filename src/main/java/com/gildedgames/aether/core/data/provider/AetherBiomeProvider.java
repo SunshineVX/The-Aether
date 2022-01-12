@@ -8,8 +8,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 
-public class AetherBiomeProvider
-{
+public class AetherBiomeProvider {
     public static Biome makeDefaultBiome(BiomeGenerationSettings.Builder builder) {
         return fullDefinition(
                 Biome.Precipitation.NONE,
@@ -39,40 +38,39 @@ public class AetherBiomeProvider
                         .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(AetherEntityTypes.FLYING_COW.get(), 10, 4, 4))
                         .addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(AetherEntityTypes.AERWHALE.get(), 2, 1, 1))
                         .build(),
-                builder.build(),
-                        //// TODO GenerationStep.Decoration.RAW_GENERATION
-                        //.addFeature(GenerationStep.Decoration.RAW_GENERATION, AetherFeatureData.QUICKSOIL_SHELF_FEATURE)
-                        ////  "aether:crystal_tree"
-                        //// TODO GenerationStep.Decoration.LAKES
-                        ////  "aether:water_lake"
-                        //// TODO GenerationStep.Decoration.UNDERGROUND_ORES
-                        ////   "aether:ore_aether_dirt",
-                        ////   "aether:ore_icestone",
-                        ////   "aether:ore_ambrosium",
-                        ////   "aether:ore_zanite",
-                        ////   "aether:ore_gravitite"
-                        //// TODO GenerationStep.Decoration.FLUID_SPRINGS
-                        ////   "aether:spring_water"
-                        //// TODO GenerationStep.Decoration.VEGETAL_DECORATION
-                        ////   "aether:grass_patch",
-                        ////   "aether:tall_grass_patch",
-                        ////   "aether:aether_skylands_flowers",
-                        ////   "aether:tree_skyroot",
-                        ////   "aether:tree_golden_oak",
-                        ////   "aether:holiday_tree"
+                builder
+                        // TODO GenerationStep.Decoration.RAW_GENERATION
+                        .addFeature(GenerationStep.Decoration.RAW_GENERATION, AetherFeatureData.QUICKSOIL_SHELF_FEATURE)
+                        //  "aether:crystal_tree"
+                        // TODO GenerationStep.Decoration.LAKES
+                        //  "aether:water_lake"
+                        // TODO GenerationStep.Decoration.UNDERGROUND_ORES
+                        //   "aether:ore_aether_dirt",
+                        //   "aether:ore_icestone",
+                        //   "aether:ore_ambrosium",
+                        //   "aether:ore_zanite",
+                        //   "aether:ore_gravitite"
+                        // TODO GenerationStep.Decoration.FLUID_SPRINGS
+                        //   "aether:spring_water"
+                        // TODO GenerationStep.Decoration.VEGETAL_DECORATION
+                        //   "aether:grass_patch",
+                        //   "aether:tall_grass_patch",
+                        //   "aether:aether_skylands_flowers",
+                        //   "aether:tree_skyroot",
+                        //   "aether:tree_golden_oak",
+                        //   "aether:holiday_tree"
                         //.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, AetherFeatureData.COLD_AERCLOUD_FEATURE)
                         //.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, AetherFeatureData.BLUE_AERCLOUD_FEATURE)
                         //.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, AetherFeatureData.GOLDEN_AERCLOUD_FEATURE)
                         //.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, AetherFeatureData.PINK_AERCLOUD_FEATURE)
-                        ////.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AetherFeatureData.SKYROOT_TREE_FEATURE)
-                        //.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AetherFeatureData.FLOWER_FEATURE)
-                        //.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_DIRT_FEATURE)
-                        //.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_ICESTONE_FEATURE)
-                        //.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_AMBROSIUM_FEATURE)
-                        //.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_ZANITE_FEATURE)
-                        //.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_GRAVITITE_DENSE_FEATURE)
-                        //.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_GRAVITITE_COMMON_FEATURE)
-                        //.build(),
+                        .addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AetherFeatureData.FLOWER_FEATURE)
+                        .addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_DIRT_FEATURE)
+                        .addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_ICESTONE_FEATURE)
+                        .addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_AMBROSIUM_FEATURE)
+                        .addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_ZANITE_FEATURE)
+                        .addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_GRAVITITE_DENSE_FEATURE)
+                        .addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, AetherFeatureData.ORE_GRAVITITE_COMMON_FEATURE)
+                        .build(),
                 Biome.TemperatureModifier.NONE
         );
     }

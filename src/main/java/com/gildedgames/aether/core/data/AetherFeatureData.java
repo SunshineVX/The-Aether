@@ -5,12 +5,10 @@ import com.gildedgames.aether.common.registry.AetherFeatures;
 import com.gildedgames.aether.common.registry.AetherTags;
 import com.gildedgames.aether.common.world.gen.configuration.AercloudConfiguration;
 import com.gildedgames.aether.common.world.gen.configuration.SimpleDiskConfiguration;
-import com.gildedgames.aether.common.world.gen.placement.ElevationAdjustment;
 import com.gildedgames.aether.common.world.gen.placement.ElevationFilter;
 import com.gildedgames.aether.core.data.provider.AetherFeatureDataProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.util.Mth;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -21,7 +19,9 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
@@ -31,14 +31,18 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
+import java.util.List;
 import java.util.OptionalInt;
 
-public class AetherFeatureData
-{
+public class AetherFeatureData {
+    //public static final HeightRangePlacement TREE_PLACEMENT_HEIGHT = HeightRangePlacement.of(BiasedToBottomHeight.of(VerticalAnchor.aboveBottom(10), VerticalAnchor.absolute(80), 2));
+    public static final HeightRangePlacement TREE_PLACEMENT_HEIGHT = HeightRangePlacement.of(UniformHeight.of(VerticalAnchor.aboveBottom(32), VerticalAnchor.absolute(75)));
+
     public static final ConfiguredFeature<AercloudConfiguration, ?> COLD_AERCLOUD_FEATURE_BASE = AetherFeatures.AERCLOUD.get()
             .configured(AetherFeatureDataProvider.createAercloudConfig(16, AetherBlocks.COLD_AERCLOUD.get().defaultBlockState()));
     public static final ConfiguredFeature<AercloudConfiguration, ?> BLUE_AERCLOUD_FEATURE_BASE = AetherFeatures.AERCLOUD.get()
@@ -83,12 +87,19 @@ public class AetherFeatureData
     public static final PlacedFeature PINK_AERCLOUD_FEATURE = PINK_AERCLOUD_FEATURE_BASE.placed(
             AetherFeatureDataProvider.createAercloudPlacements(160, 7));
 
-    public static final PlacedFeature SKYROOT_TREE_FEATURE = SKYROOT_TREE_FEATURE_BASE.placed(VegetationPlacements.treePlacement(PlacementUtils.countExtra(6, 0.1F, 1), AetherBlocks.SKYROOT_SAPLING.get()));
-    public static final PlacedFeature GOLDEN_OAK_TREE_FEATURE = GOLDEN_OAK_FEATURE_BASE.placed(VegetationPlacements.treePlacement(PlacementUtils.countExtra(1, 0.1F, 1), AetherBlocks.GOLDEN_OAK_SAPLING.get()));
+    public static final ConfiguredFeature<RandomFeatureConfiguration, ?> TREE_BLEND = Feature.RANDOM_SELECTOR.configured(new RandomFeatureConfiguration(List.of(
+            new WeightedPlacedFeature(AetherFeatureData.GOLDEN_OAK_FEATURE_BASE.placed(
+                    //BiomeFilter.biome(),
+                    AetherFeatureDataProvider.copyBlockSurvivability(AetherBlocks.GOLDEN_OAK_SAPLING.get())
+            ), 0.01f)
+    ), AetherFeatureData.SKYROOT_TREE_FEATURE_BASE.placed(
+            //BiomeFilter.biome(),
+            AetherFeatureDataProvider.copyBlockSurvivability(AetherBlocks.SKYROOT_SAPLING.get())
+    )));
 
-    public static final PlacedFeature FLOWER_FEATURE = FLOWER_FEATURE_BASE.placed(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome());
+    public static final PlacedFeature FLOWER_FEATURE = FLOWER_FEATURE_BASE.placed(CountOnEveryLayerPlacement.of(1), BiomeFilter.biome());
 
-    public static final PlacedFeature QUICKSOIL_SHELF_FEATURE = QUICKSOIL_BASE.placed(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, new ElevationAdjustment(UniformInt.of(-4, -2)), new ElevationFilter(47, 70), BlockPredicateFilter.forPredicate(BlockPredicate.anyOf(BlockPredicate.matchesBlock(AetherBlocks.AETHER_DIRT.get(), BlockPos.ZERO), BlockPredicate.matchesTag(AetherTags.Blocks.HOLYSTONE)))); // FIXME once Terrain can go above 63 again, change 47 -> 63
+    public static final PlacedFeature QUICKSOIL_SHELF_FEATURE = QUICKSOIL_BASE.placed(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, RandomOffsetPlacement.vertical(UniformInt.of(-4, -2)), new ElevationFilter(47, 70), BlockPredicateFilter.forPredicate(BlockPredicate.anyOf(BlockPredicate.matchesBlock(AetherBlocks.AETHER_DIRT.get(), BlockPos.ZERO), BlockPredicate.matchesTag(AetherTags.Blocks.HOLYSTONE)))); // FIXME once Terrain can go above 63 again, change 47 -> 63
 
     public static final RuleTest HOLYSTONE = new TagMatchTest(AetherTags.Blocks.HOLYSTONE);
 

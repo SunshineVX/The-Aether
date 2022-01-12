@@ -1,16 +1,13 @@
 package com.gildedgames.aether.core.data;
 
 import com.gildedgames.aether.Aether;
-import com.gildedgames.aether.common.block.state.properties.AetherBlockStateProperties;
-import com.gildedgames.aether.common.registry.AetherBlocks;
-import com.gildedgames.aether.common.world.gen.chunk.CelledSpaceGenerator;
+import com.gildedgames.aether.common.world.gen.chunk.GraphingGenerator;
 import com.gildedgames.aether.core.data.provider.AetherWorldProvider;
 import com.gildedgames.aether.core.util.math.Matrix3x3;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.BuiltinRegistries;
@@ -23,8 +20,6 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-
-import java.util.List;
 
 import java.util.List;
 
@@ -68,37 +63,59 @@ public class AetherWorldData extends AetherWorldProvider {
                 //        ), () -> AetherBiomeData.UNDERGROUND
                 //),
                 Pair.of(
-                        Climate.parameters(
-                                Climate.Parameter.span(-2, -0.2f),
+                        new Climate.ParameterPoint(
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
-                                0f
-                        ), () -> AetherBiomeData.SPARSE_FOREST
+                                Climate.Parameter.span(1f, 2f),
+                                0
+                        ), () -> AetherBiomeData.GOLDEN_FOREST
                 ),
                 Pair.of(
-                        Climate.parameters(
-                                Climate.Parameter.span(-0.2f, 0.2f),
+                        new Climate.ParameterPoint(
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
-                                0f
+                                Climate.Parameter.span(0.5f, 1f),
+                                0
                         ), () -> AetherBiomeData.SKYWOOD_FOREST
                 ),
                 Pair.of(
-                        Climate.parameters(
-                                Climate.Parameter.span(0.2f, 2),
+                        new Climate.ParameterPoint(
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
                                 FULL_RANGE,
-                                0f
-                        ), () -> AetherBiomeData.CRAMPED_FOREST
+                                Climate.Parameter.span(-0.1f, 0.5f),
+                                0
+                        ), () -> AetherBiomeData.SKYWOOD_THICKET
+                ),
+                Pair.of(
+                        new Climate.ParameterPoint(
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                Climate.Parameter.span(-0.7f, -0.1f),
+                                0
+                        ), () -> AetherBiomeData.SKYWOOD_FOREST
+                ),
+                Pair.of(
+                        new Climate.ParameterPoint(
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                FULL_RANGE,
+                                Climate.Parameter.span(-2f, -0.7f),
+                                0
+                        ), () -> AetherBiomeData.SKYWOOD_GROVE
                 )
         )));
 
@@ -115,87 +132,6 @@ public class AetherWorldData extends AetherWorldProvider {
         //        Blocks.REDSTONE_BLOCK.defaultBlockState(),
         //        AetherBlocks.HOLYSTONE.get().defaultBlockState().setValue(AetherBlockStateProperties.DOUBLE_DROPS, true)
         //);
-
-        /*List<BlockState> states = List.of(
-                Blocks.WHITE_WOOL.defaultBlockState(),
-                Blocks.ORANGE_WOOL.defaultBlockState(),
-                Blocks.MAGENTA_WOOL.defaultBlockState(),
-                Blocks.LIGHT_BLUE_WOOL.defaultBlockState(),
-                Blocks.YELLOW_WOOL.defaultBlockState(),
-                Blocks.LIME_WOOL.defaultBlockState(),
-                Blocks.PINK_WOOL.defaultBlockState(),
-                Blocks.GRAY_WOOL.defaultBlockState(),
-                Blocks.LIGHT_GRAY_WOOL.defaultBlockState(),
-                Blocks.CYAN_WOOL.defaultBlockState(),
-                Blocks.PURPLE_WOOL.defaultBlockState(),
-                Blocks.BLUE_WOOL.defaultBlockState(),
-                Blocks.BROWN_WOOL.defaultBlockState(),
-                Blocks.GREEN_WOOL.defaultBlockState(),
-                Blocks.RED_WOOL.defaultBlockState(),
-                Blocks.BLACK_WOOL.defaultBlockState(),
-
-                //Blocks.OAK_PLANKS.defaultBlockState(),
-                //Blocks.SPRUCE_PLANKS.defaultBlockState(),
-                //Blocks.BIRCH_PLANKS.defaultBlockState(),
-                //Blocks.JUNGLE_PLANKS.defaultBlockState(),
-                //Blocks.ACACIA_PLANKS.defaultBlockState(),
-                //Blocks.DARK_OAK_PLANKS.defaultBlockState(),
-                //Blocks.CRIMSON_PLANKS.defaultBlockState(),
-                //Blocks.WARPED_PLANKS.defaultBlockState(),
-
-                //Blocks.WAXED_COPPER_BLOCK.defaultBlockState(),
-                //Blocks.WAXED_EXPOSED_COPPER.defaultBlockState(),
-                //Blocks.WAXED_WEATHERED_COPPER.defaultBlockState(),
-                //Blocks.WAXED_OXIDIZED_COPPER.defaultBlockState(),
-
-                Blocks.WHITE_CONCRETE.defaultBlockState(),
-                Blocks.ORANGE_CONCRETE.defaultBlockState(),
-                Blocks.MAGENTA_CONCRETE.defaultBlockState(),
-                Blocks.LIGHT_BLUE_CONCRETE.defaultBlockState(),
-                Blocks.YELLOW_CONCRETE.defaultBlockState(),
-                Blocks.LIME_CONCRETE.defaultBlockState(),
-                Blocks.PINK_CONCRETE.defaultBlockState(),
-                Blocks.GRAY_CONCRETE.defaultBlockState(),
-                Blocks.LIGHT_GRAY_CONCRETE.defaultBlockState(),
-                Blocks.CYAN_CONCRETE.defaultBlockState(),
-                Blocks.PURPLE_CONCRETE.defaultBlockState(),
-                Blocks.BLUE_CONCRETE.defaultBlockState(),
-                Blocks.BROWN_CONCRETE.defaultBlockState(),
-                Blocks.GREEN_CONCRETE.defaultBlockState(),
-                Blocks.RED_CONCRETE.defaultBlockState(),
-                Blocks.BLACK_CONCRETE.defaultBlockState()//,
-
-                //Blocks.OAK_WOOD.defaultBlockState(),
-                //Blocks.SPRUCE_WOOD.defaultBlockState(),
-                //Blocks.BIRCH_WOOD.defaultBlockState(),
-                //Blocks.JUNGLE_WOOD.defaultBlockState(),
-                //Blocks.ACACIA_WOOD.defaultBlockState(),
-                //Blocks.DARK_OAK_WOOD.defaultBlockState(),
-                //Blocks.CRIMSON_NYLIUM.defaultBlockState(),
-                //Blocks.WARPED_NYLIUM.defaultBlockState(),
-
-                //Blocks.WAXED_CUT_COPPER.defaultBlockState(),
-                //Blocks.WAXED_EXPOSED_CUT_COPPER.defaultBlockState(),
-                //Blocks.WAXED_WEATHERED_CUT_COPPER.defaultBlockState(),
-                //Blocks.WAXED_OXIDIZED_CUT_COPPER.defaultBlockState(),
-
-                //Blocks.WHITE_TERRACOTTA.defaultBlockState(),
-                //Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
-                //Blocks.MAGENTA_TERRACOTTA.defaultBlockState(),
-                //Blocks.LIGHT_BLUE_TERRACOTTA.defaultBlockState(),
-                //Blocks.YELLOW_TERRACOTTA.defaultBlockState(),
-                //Blocks.LIME_TERRACOTTA.defaultBlockState(),
-                //Blocks.PINK_TERRACOTTA.defaultBlockState(),
-                //Blocks.GRAY_TERRACOTTA.defaultBlockState(),
-                //Blocks.LIGHT_GRAY_TERRACOTTA.defaultBlockState(),
-                //Blocks.CYAN_TERRACOTTA.defaultBlockState(),
-                //Blocks.PURPLE_TERRACOTTA.defaultBlockState(),
-                //Blocks.BLUE_TERRACOTTA.defaultBlockState(),
-                //Blocks.BROWN_TERRACOTTA.defaultBlockState(),
-                //Blocks.GREEN_TERRACOTTA.defaultBlockState(),
-                //Blocks.RED_TERRACOTTA.defaultBlockState(),
-                //Blocks.BLACK_TERRACOTTA.defaultBlockState()
-        );*/
 
         List<BlockState> states = List.of(
                 // -1.0
@@ -223,18 +159,34 @@ public class AetherWorldData extends AetherWorldProvider {
                 Blocks.PURPLE_CONCRETE.defaultBlockState(),
                 Blocks.MAGENTA_CONCRETE.defaultBlockState()
                 // 1.0
+        );
 
-                //Blocks.RED_TERRACOTTA.defaultBlockState(),
-                //Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
-                //Blocks.YELLOW_TERRACOTTA.defaultBlockState(),
-                //Blocks.LIME_TERRACOTTA.defaultBlockState(),
-                //Blocks.GREEN_TERRACOTTA.defaultBlockState(),
-
-                //Blocks.CYAN_TERRACOTTA.defaultBlockState(),
-                //Blocks.LIGHT_BLUE_TERRACOTTA.defaultBlockState(),
-                //Blocks.BLUE_TERRACOTTA.defaultBlockState(),
-                //Blocks.PURPLE_TERRACOTTA.defaultBlockState(),
-                //Blocks.MAGENTA_TERRACOTTA.defaultBlockState()
+        List<BlockState> glassStates = List.of(
+                // -1.0
+                Blocks.RED_STAINED_GLASS.defaultBlockState(),
+                Blocks.ORANGE_STAINED_GLASS.defaultBlockState(),
+                Blocks.YELLOW_STAINED_GLASS.defaultBlockState(),
+                Blocks.LIME_STAINED_GLASS.defaultBlockState(),
+                Blocks.GREEN_STAINED_GLASS.defaultBlockState(),
+                // -0.5
+                Blocks.CYAN_STAINED_GLASS.defaultBlockState(),
+                Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(),
+                Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
+                Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
+                Blocks.MAGENTA_STAINED_GLASS.defaultBlockState(),
+                // SIGN BOUNDARY - 0.0
+                Blocks.RED_STAINED_GLASS.defaultBlockState(),
+                Blocks.ORANGE_STAINED_GLASS.defaultBlockState(),
+                Blocks.YELLOW_STAINED_GLASS.defaultBlockState(),
+                Blocks.LIME_STAINED_GLASS.defaultBlockState(),
+                Blocks.GREEN_STAINED_GLASS.defaultBlockState(),
+                // -0.5
+                Blocks.CYAN_STAINED_GLASS.defaultBlockState(),
+                Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(),
+                Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
+                Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
+                Blocks.MAGENTA_STAINED_GLASS.defaultBlockState()
+                // -1.0
         );
 
         Matrix3x3 basis = Matrix3x3.identityScaled(1f).add(
@@ -243,7 +195,7 @@ public class AetherWorldData extends AetherWorldProvider {
                 0.125f, 0, 0
         );
 
-        CelledSpaceGenerator debug = new CelledSpaceGenerator(aetherChunkGen, basis, new BlockPos(64, 64, 64), this.aetherSurfaceRules(), states);
+        GraphingGenerator debug = new GraphingGenerator(aetherChunkGen, states, glassStates);
 
         this.serialize(Registry.LEVEL_STEM_REGISTRY, new ResourceLocation(Aether.MODID, "the_aether"), new LevelStem(() -> dimensionType, debug), LevelStem.CODEC);
     }

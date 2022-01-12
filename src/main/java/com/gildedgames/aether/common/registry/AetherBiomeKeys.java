@@ -8,7 +8,8 @@ import net.minecraft.world.level.biome.Biome;
 
 public class AetherBiomeKeys {
     public static final ResourceKey<Biome> UNDERGROUND = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Aether.MODID, "underground"));
-    public static final ResourceKey<Biome> CRAMPED_FOREST = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Aether.MODID, "cramped_forest"));
+    public static final ResourceKey<Biome> SKYWOOD_GROVE = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Aether.MODID, "skywood_grove"));
     public static final ResourceKey<Biome> SKYWOOD_FOREST = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Aether.MODID, "skywood_forest"));
-    public static final ResourceKey<Biome> SPARSE_FOREST = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Aether.MODID, "sparse_forest"));
+    public static final ResourceKey<Biome> SKYWOOD_THICKET = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Aether.MODID, "skywood_thicket"));
+    public static final ResourceKey<Biome> GOLDEN_FOREST = ResourceKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Aether.MODID, "golden_forest"));
 }
