@@ -112,9 +112,9 @@
       "y_factor": 160.0
     },
     "top_slide": {
-      "target": -23.4375,
-      "size": 64,
-      "offset": -46
+      "target": -3.0,
+      "size": 40,
+      "offset": -22
     },
     "bottom_slide": {
       "target": -0.234375,

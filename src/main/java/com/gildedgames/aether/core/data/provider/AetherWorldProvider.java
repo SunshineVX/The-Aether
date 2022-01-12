@@ -68,8 +68,7 @@ public abstract class AetherWorldProvider extends SmartRegistryWriteOps<JsonElem
                         0,
                         128,
                         new NoiseSamplingSettings(2, 1, 80, 160),
-                        new NoiseSlider(-23.4375D, 64, -46),
-
+                        new NoiseSlider(-3, 40, -22),
                         new NoiseSlider(-0.234375D, 7, 1),
                         2,
                         1,
