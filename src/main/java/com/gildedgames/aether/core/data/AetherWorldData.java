@@ -1,13 +1,16 @@
 package com.gildedgames.aether.core.data;
 
 import com.gildedgames.aether.Aether;
-import com.gildedgames.aether.common.world.gen.chunk.GraphingGenerator;
+import com.gildedgames.aether.common.block.state.properties.AetherBlockStateProperties;
+import com.gildedgames.aether.common.registry.AetherBlocks;
+import com.gildedgames.aether.common.world.gen.chunk.CelledSpaceGenerator;
 import com.gildedgames.aether.core.data.provider.AetherWorldProvider;
 import com.gildedgames.aether.core.util.math.Matrix3x3;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.BuiltinRegistries;
@@ -22,6 +25,7 @@ import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 
 import java.util.List;
+import java.util.Random;
 
 public class AetherWorldData extends AetherWorldProvider {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create(); // If desired, custom formatting rules can be set up here
@@ -119,7 +123,8 @@ public class AetherWorldData extends AetherWorldProvider {
                 )
         )));
 
-        NoiseBasedChunkGenerator aetherChunkGen = new NoiseBasedChunkGenerator(RegistryAccess.builtin().registryOrThrow(Registry.NOISE_REGISTRY), biomes, 0L, () -> worldNoiseSettings);
+        // TODO Remove Seed from Datagen
+        NoiseBasedChunkGenerator aetherChunkGen = new NoiseBasedChunkGenerator(RegistryAccess.builtin().registryOrThrow(Registry.NOISE_REGISTRY), biomes, new Random().nextLong(), () -> worldNoiseSettings);
 
         AetherBiomeData.ALL_AETHER_BIOMES.forEach(biome -> this.serialize(Registry.BIOME_REGISTRY, biome.getRegistryName(), biome, Biome.DIRECT_CODEC));
 
@@ -136,28 +141,48 @@ public class AetherWorldData extends AetherWorldProvider {
         List<BlockState> states = List.of(
                 // -1.0
                 Blocks.RED_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.ORANGE_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.YELLOW_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.LIME_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.GREEN_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 // -0.5
                 Blocks.CYAN_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.LIGHT_BLUE_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.BLUE_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.PURPLE_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.MAGENTA_WOOL.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 // SIGN BOUNDARY - 0.0
                 Blocks.RED_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.ORANGE_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.YELLOW_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.LIME_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.GREEN_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 // 0.5
                 Blocks.CYAN_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.LIGHT_BLUE_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.BLUE_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState(),
                 Blocks.PURPLE_CONCRETE.defaultBlockState(),
-                Blocks.MAGENTA_CONCRETE.defaultBlockState()
+                Blocks.AIR.defaultBlockState(),
+                Blocks.MAGENTA_CONCRETE.defaultBlockState(),
+                Blocks.AIR.defaultBlockState()
                 // 1.0
         );
 
@@ -174,28 +199,37 @@ public class AetherWorldData extends AetherWorldProvider {
                 Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
                 Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
                 Blocks.MAGENTA_STAINED_GLASS.defaultBlockState(),
-                // SIGN BOUNDARY - 0.0
+                // SIGN BOUNDARY - 0.0 - DEEP UNDERGROUND
                 Blocks.RED_STAINED_GLASS.defaultBlockState(),
                 Blocks.ORANGE_STAINED_GLASS.defaultBlockState(),
                 Blocks.YELLOW_STAINED_GLASS.defaultBlockState(),
                 Blocks.LIME_STAINED_GLASS.defaultBlockState(),
                 Blocks.GREEN_STAINED_GLASS.defaultBlockState(),
-                // -0.5
+                // 0.5 - UNDERGROUND
                 Blocks.CYAN_STAINED_GLASS.defaultBlockState(),
                 Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(),
                 Blocks.BLUE_STAINED_GLASS.defaultBlockState(),
                 Blocks.PURPLE_STAINED_GLASS.defaultBlockState(),
                 Blocks.MAGENTA_STAINED_GLASS.defaultBlockState()
-                // -1.0
+                // 1.0 - Surface
         );
+
+        List<BlockState> onlyHolystone = List.of(AetherBlocks.HOLYSTONE.get().defaultBlockState().setValue(AetherBlockStateProperties.DOUBLE_DROPS, true));
+
+        //Matrix3x3 basis = Matrix3x3.identityScaled(1f).add(
+        //        0, 0.25f, 0,
+        //        0, 0, 0.0625f,
+        //        0.125f, 0, 0
+        //);
 
         Matrix3x3 basis = Matrix3x3.identityScaled(1f).add(
-                0, 0.25f, 0,
-                0, 0, 0.0625f,
-                0.125f, 0, 0
+                0, 0, 0,
+                0, 0, 0,
+                0, 0, 0
         );
 
-        GraphingGenerator debug = new GraphingGenerator(aetherChunkGen, states, glassStates);
+        CelledSpaceGenerator debug = new CelledSpaceGenerator(aetherChunkGen, basis, new BlockPos(64, 64, 64), this.aetherSurfaceRules(), states);
+        //GraphingGenerator debug = new GraphingGenerator(aetherChunkGen, states, glassStates);
 
         this.serialize(Registry.LEVEL_STEM_REGISTRY, new ResourceLocation(Aether.MODID, "the_aether"), new LevelStem(() -> dimensionType, debug), LevelStem.CODEC);
     }

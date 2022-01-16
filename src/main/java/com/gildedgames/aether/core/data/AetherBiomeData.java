@@ -38,7 +38,7 @@ class AetherBiomeData {
             .addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AetherFeatureDataProvider.treeBlendDensity(3))
     ).setRegistryName(AetherBiomeKeys.SKYWOOD_THICKET.location());
 
-    final static Biome GOLDEN_FOREST = AetherBiomeProvider.makeDefaultBiome(new BiomeGenerationSettings.Builder()
+    final static Biome GOLDEN_FOREST = AetherBiomeProvider.makeDefaultBiome(0xb1_ff_cb, new BiomeGenerationSettings.Builder()
             .addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AetherFeatureData.GOLDEN_OAK_FEATURE_BASE.placed(
                     CountOnEveryLayerPlacement.of(2),
                     //BiomeFilter.biome(),

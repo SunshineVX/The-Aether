@@ -31,6 +31,10 @@ public record Matrix3x3(
         );
     }
 
+    public float determinant() {
+        return this.a00 * ((this.a11 * this.a22) - (this.a12 * this.a21)) - this.a01 * ((this.a10 * this.a22) - (this.a02 * this.a21)) + this.a02 * ((this.a11 * this.a20) - (this.a10 * this.a21));
+    }
+
     // Multiplies vector horizontally across the top matrix row for new Vector X coordinate
     public float multiplyXRow(float x, float y, float z) {
         return x * this.a00 + y * this.a01 + z * this.a02;
@@ -47,10 +51,10 @@ public record Matrix3x3(
     }
 
     public Matrix3x3 scale(float scalar) {
-        return this.scale(scalar, scalar, scalar, scalar, scalar, scalar, scalar, scalar, scalar);
+        return this.scaleAll(scalar, scalar, scalar, scalar, scalar, scalar, scalar, scalar, scalar);
     }
 
-    public Matrix3x3 scale(float s00, float s01, float s02, float s10, float s11, float s12, float s20, float s21, float s22) {
+    public Matrix3x3 scaleAll(float s00, float s01, float s02, float s10, float s11, float s12, float s20, float s21, float s22) {
         return new Matrix3x3(
                 this.a00 * s00, this.a01 * s01, this.a02 * s02,
                 this.a10 * s10, this.a11 * s11, this.a12 * s12,
@@ -58,7 +62,8 @@ public record Matrix3x3(
         );
     }
 
-    private Matrix3x3 multiply(float b00, float b01, float b02, float b10, float b11, float b12, float b20, float b21, float b22) {
+    // Proper Matrix Multiplication
+    public Matrix3x3 multiply(float b00, float b01, float b02, float b10, float b11, float b12, float b20, float b21, float b22) {
         return new Matrix3x3(
                 this.multiplyXRow(b00, b10, b20), this.multiplyXRow(b01, b11, b21), this.multiplyXRow(b02, b12, b22),
                 this.multiplyYRow(b00, b10, b20), this.multiplyYRow(b01, b11, b21), this.multiplyYRow(b02, b12, b22),
@@ -74,7 +79,10 @@ public record Matrix3x3(
         );
     }
 
-    // TODO Inverse
+    @Deprecated // FIXME Proper inverse before using
+    public Matrix3x3 inverse() {
+        return this.scale(1f/this.determinant());
+    }
 
     private List<Float> values() {
         return List.of(this.a00, this.a01, this.a02, this.a10, this.a11, this.a12, this.a20, this.a21, this.a22);

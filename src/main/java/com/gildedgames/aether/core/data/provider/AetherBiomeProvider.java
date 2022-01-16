@@ -10,6 +10,10 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 
 public class AetherBiomeProvider {
     public static Biome makeDefaultBiome(BiomeGenerationSettings.Builder builder) {
+        return makeDefaultBiome(0xb1_ff_cb, builder);
+    }
+
+    public static Biome makeDefaultBiome(int grassColor, BiomeGenerationSettings.Builder builder) {
         return fullDefinition(
                 Biome.Precipitation.NONE,
                 Biome.BiomeCategory.NONE,
@@ -20,8 +24,8 @@ public class AetherBiomeProvider {
                         .skyColor(0xc0_c0_ff)
                         .waterColor(0x3f_76_e4)
                         .waterFogColor(0x05_05_33)
-                        .grassColorOverride(0xb1_ff_cb)
-                        .foliageColorOverride(0xb1_ff_cb)
+                        .grassColorOverride(grassColor)
+                        .foliageColorOverride(grassColor)
                         .grassColorModifier(BiomeSpecialEffects.GrassColorModifier.NONE)
                         .backgroundMusic(new Music(AetherSoundEvents.MUSIC_AETHER.get(), 12000, 24000, true))
                         .build(),
